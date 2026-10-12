@@ -60,7 +60,8 @@ A profile is YAML that says how use of a kind of software shows up: registry, co
 
 - confidence ≥ `review.accept` (0.85) → written to `usescout`.
 - between `review.review` (0.4) and `accept` → added to a single PR from `usescout-review`. While it is open, new items are appended to it; no second PR is opened.
-- Delete a line in `data/review/pending.jsonl` to reject an item, then merge to accept the rest. Closing the PR rejects everything in it (`review.on_close: snooze` re-proposes after `snooze_weeks`).
+- Delete a line in `data/review/pending.jsonl` to reject an item, then merge to accept the rest. Rejected IDs are recorded in `data/rejected.jsonl`, so the same repository or paper is not proposed again. Closing the PR rejects everything in it (`review.on_close: snooze` re-proposes after `snooze_weeks`).
+- The example workflow also runs when the default `usescout-review` PR is merged. That run moves the accepted records into `data/findings.jsonl` and refreshes `badge.json` immediately. If you customize `review_branch`, update the matching condition in `examples/workflow.yml`.
 - Flood safeguard: at most `max_items_per_pr` (100) items are detailed in a PR. The rest go to `data/review/backlog.csv` (delete rows to bulk-reject) and are promoted in later PRs. If a run finds far more than usual (`spike_factor`), nothing is auto-accepted and the PR warns about a possible name collision.
 
 ## Evidence: where exactly was it found?

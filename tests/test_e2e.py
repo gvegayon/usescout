@@ -218,6 +218,8 @@ def test_review_pr_lifecycle_merge_with_admin_edit(fake, tmp_path):
     rej = {r["id"] for r in rows(work, "usescout", "data/rejected.jsonl")}
     assert removed in rej and removed not in acc and len(acc) == 6
     assert api.created == 1 and r3.counts["to_review"] == 0   # rejected items never come back
+    badge = json.loads(show(work, "usescout", "badge.json"))
+    assert badge["message"] == "1 repos · 5 papers"  # merged review items refresh the badge
 
 
 def test_closed_pr_rejects_and_unchanged_run_makes_no_commit(fake, tmp_path):
